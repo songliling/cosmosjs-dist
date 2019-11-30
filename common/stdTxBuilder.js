@@ -43,6 +43,7 @@ var stdTx_1 = require("./stdTx");
 var address_1 = require("./address");
 var big_integer_1 = __importDefault(require("big-integer"));
 var crypto_1 = require("../crypto");
+var coin_1 = require("./coin");
 function nullableBnToBI(bn) {
     var result = big_integer_1.default(-1);
     if (bn) {
@@ -60,11 +61,25 @@ function nullableBnToBI(bn) {
 }
 exports.stdTxBuilder = function (context, msgs, config) {
     return address_1.useBech32ConfigPromise(context.get("bech32Config"), function () { return __awaiter(_this, void 0, void 0, function () {
-        var stdFee, seenSigners, signers, _i, msgs_1, msg, _a, _b, signer, keys, signatures, _c, signers_1, signer, accountNumber, sequence, account, signDoc, sig, pubKey, _d, keys_1, key, signature, stdTx;
+        var walletProvider, fee, stdFee, seenSigners, signers, _i, msgs_1, msg, _a, _b, signer, keys, signatures, _c, signers_1, signer, accountNumber, sequence, account, signDoc, sig, pubKey, _d, keys_1, key, signature, stdTx;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
-                    stdFee = new stdTx_1.StdFee([config.fee], config.gas);
+                    walletProvider = context.get("walletProvider");
+                    if (!walletProvider.getTxBuilderConfig) return [3 /*break*/, 2];
+                    return [4 /*yield*/, walletProvider.getTxBuilderConfig(context, config)];
+                case 1:
+                    config = _e.sent();
+                    _e.label = 2;
+                case 2:
+                    fee = [];
+                    if (config.fee instanceof coin_1.Coin) {
+                        fee = [config.fee];
+                    }
+                    else {
+                        fee = config.fee;
+                    }
+                    stdFee = new stdTx_1.StdFee(fee, config.gas);
                     seenSigners = {};
                     signers = [];
                     for (_i = 0, msgs_1 = msgs; _i < msgs_1.length; _i++) {
@@ -78,20 +93,20 @@ exports.stdTxBuilder = function (context, msgs, config) {
                             }
                         }
                     }
-                    return [4 /*yield*/, context.get("walletProvider").getKeys(context)];
-                case 1:
+                    return [4 /*yield*/, walletProvider.getKeys(context)];
+                case 3:
                     keys = _e.sent();
                     signatures = [];
                     _c = 0, signers_1 = signers;
-                    _e.label = 2;
-                case 2:
-                    if (!(_c < signers_1.length)) return [3 /*break*/, 7];
+                    _e.label = 4;
+                case 4:
+                    if (!(_c < signers_1.length)) return [3 /*break*/, 9];
                     signer = signers_1[_c];
                     accountNumber = nullableBnToBI(config.accountNumber);
                     sequence = nullableBnToBI(config.sequence);
-                    if (!(accountNumber.lt(big_integer_1.default(0)) || sequence.lt(big_integer_1.default(0)))) return [3 /*break*/, 4];
+                    if (!(accountNumber.lt(big_integer_1.default(0)) || sequence.lt(big_integer_1.default(0)))) return [3 /*break*/, 6];
                     return [4 /*yield*/, context.get("queryAccount")(context, signers[0].toBech32())];
-                case 3:
+                case 5:
                     account = _e.sent();
                     if (accountNumber.lt(big_integer_1.default(0))) {
                         accountNumber = account.getAccountNumber();
@@ -99,13 +114,11 @@ exports.stdTxBuilder = function (context, msgs, config) {
                     if (sequence.lt(big_integer_1.default(0))) {
                         sequence = account.getSequence();
                     }
-                    _e.label = 4;
-                case 4:
+                    _e.label = 6;
+                case 6:
                     signDoc = new stdTx_1.StdSignDoc(context.get("codec"), accountNumber, context.get("chainId"), stdFee, config.memo, msgs, sequence);
-                    return [4 /*yield*/, context
-                            .get("walletProvider")
-                            .sign(context, signer.toBech32(), signDoc.getSignBytes())];
-                case 5:
+                    return [4 /*yield*/, walletProvider.sign(context, signer.toBech32(), signDoc.getSignBytes())];
+                case 7:
                     sig = _e.sent();
                     pubKey = void 0;
                     for (_d = 0, keys_1 = keys; _d < keys_1.length; _d++) {
@@ -121,11 +134,11 @@ exports.stdTxBuilder = function (context, msgs, config) {
                     }
                     signature = new stdTx_1.StdSignature(pubKey, sig);
                     signatures.push(signature);
-                    _e.label = 6;
-                case 6:
+                    _e.label = 8;
+                case 8:
                     _c++;
-                    return [3 /*break*/, 2];
-                case 7:
+                    return [3 /*break*/, 4];
+                case 9:
                     stdTx = new stdTx_1.StdTx(msgs, stdFee, signatures, config.memo);
                     stdTx.validateBasic();
                     return [2 /*return*/, stdTx];

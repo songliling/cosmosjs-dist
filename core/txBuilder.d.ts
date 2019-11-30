@@ -23,7 +23,7 @@ export interface TxBuilderConfig {
      */
     gasAdjustment?: number;
     memo: string;
-    fee: Coin;
+    fee: Coin[] | Coin;
     gasPrice?: number;
 }
 export declare type TxBuilder = (context: Context, msgs: Msg[], config: TxBuilderConfig) => Promise<Tx>;
