@@ -5,4 +5,5 @@ export declare class Coin {
     denom: string;
     amount: Int;
     constructor(denom: string, amount: Int | bigInteger.BigNumber);
+    toString(): string;
 }

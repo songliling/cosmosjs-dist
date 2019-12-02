@@ -25,6 +25,9 @@ var Coin = /** @class */ (function () {
         var amount = execed[1];
         return new Coin_1(denom, amount);
     };
+    Coin.prototype.toString = function () {
+        return "" + this.amount.toString() + this.denom;
+    };
     var Coin_1;
     __decorate([
         Field.String(0)
