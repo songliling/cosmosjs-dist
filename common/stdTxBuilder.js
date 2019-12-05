@@ -61,7 +61,7 @@ function nullableBnToBI(bn) {
 }
 exports.stdTxBuilder = function (context, msgs, config) {
     return address_1.useBech32ConfigPromise(context.get("bech32Config"), function () { return __awaiter(_this, void 0, void 0, function () {
-        var walletProvider, fee, stdFee, seenSigners, signers, _i, msgs_1, msg, _a, _b, signer, keys, signatures, _c, signers_1, signer, accountNumber, sequence, account, signDoc, sig, pubKey, _d, keys_1, key, signature, stdTx;
+        var walletProvider, tempFee, i, fee_1, configFee, fee, stdFee, seenSigners, signers, _i, msgs_1, msg, _a, _b, signer, keys, signatures, _c, signers_1, signer, accountNumber, sequence, account, signDoc, sig, pubKey, _d, keys_1, key, signature, stdTx;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
@@ -70,10 +70,32 @@ exports.stdTxBuilder = function (context, msgs, config) {
                     return [4 /*yield*/, walletProvider.getTxBuilderConfig(context, config)];
                 case 1:
                     config = _e.sent();
+                    tempFee = config.fee;
+                    if (Array.isArray(tempFee)) {
+                        for (i = 0; i < tempFee.length; i++) {
+                            if (!(tempFee[i] instanceof coin_1.Coin)) {
+                                fee_1 = tempFee[i];
+                                configFee = config.fee;
+                                configFee[i] = new coin_1.Coin(fee_1.denom, big_integer_1.default(fee_1.amount.toString()));
+                            }
+                        }
+                    }
+                    else {
+                        if (!(tempFee instanceof coin_1.Coin)) {
+                            config.fee = new coin_1.Coin(tempFee.denom, big_integer_1.default(tempFee.amount.toString()));
+                        }
+                    }
+                    config.gas = big_integer_1.default(config.gas.toString());
+                    if (config.sequence) {
+                        config.sequence = big_integer_1.default(config.sequence.toString());
+                    }
+                    if (config.accountNumber) {
+                        config.accountNumber = big_integer_1.default(config.accountNumber.toString());
+                    }
                     _e.label = 2;
                 case 2:
                     fee = [];
-                    if (config.fee instanceof coin_1.Coin) {
+                    if (!Array.isArray(config.fee)) {
                         fee = [config.fee];
                     }
                     else {
