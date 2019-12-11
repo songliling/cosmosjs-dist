@@ -15,7 +15,7 @@ var big_integer_1 = __importDefault(require("big-integer"));
 var buffer_1 = require("buffer/");
 var sortJson_1 = require("../utils/sortJson");
 function registerCodec(codec) {
-    codec.registerConcrete("auth/StdTx", StdTx.prototype);
+    codec.registerConcrete("cosmos-sdk/StdTx", StdTx.prototype);
 }
 exports.registerCodec = registerCodec;
 var StdTx = /** @class */ (function () {
