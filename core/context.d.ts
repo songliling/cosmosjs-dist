@@ -7,22 +7,21 @@ import { QueryAccount } from "./account";
 import { BIP44 } from "./bip44";
 import { Codec } from "@node-a-team/ts-amino";
 export declare class ImmutableContext<T> {
-    private context;
-    constructor(context: T);
-    get<K extends keyof T>(key: K): T[K];
-    set<K extends keyof T>(key: K, value: T[K]): ImmutableContext<T>;
+  private context;
+  constructor(context: T);
+  get<K extends keyof T>(key: K): T[K];
+  set<K extends keyof T>(key: K, value: T[K]): ImmutableContext<T>;
 }
 export interface IContext {
-    chainId: string;
-    txEncoder: TxEncoder;
-    txBuilder: TxBuilder;
-    bech32Config: Bech32Config;
-    walletProvider: WalletProvider;
-    rpcInstance: AxiosInstance;
-    restInstance: AxiosInstance;
-    queryAccount: QueryAccount;
-    bip44: BIP44;
-    codec: Codec;
+  chainId: string;
+  txEncoder: TxEncoder;
+  txBuilder: TxBuilder;
+  bech32Config: Bech32Config;
+  walletProvider: WalletProvider;
+  rpcInstance: AxiosInstance;
+  restInstance: AxiosInstance;
+  queryAccount: QueryAccount;
+  bip44: BIP44;
+  codec: Codec;
 }
-export declare class Context extends ImmutableContext<IContext> {
-}
+export declare class Context extends ImmutableContext<IContext> {}

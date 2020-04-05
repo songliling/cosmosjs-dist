@@ -5,14 +5,24 @@ import { WalletProvider, Key } from "./walletProvider";
  * Note: WebUSB support requires Cosmos app >= 1.5.3
  */
 export declare class LedgerWalletProvider implements WalletProvider {
-    readonly transport: "WebUSB" | "U2F" | "HID";
-    private readonly account;
-    private readonly index;
-    private app;
-    private path;
-    private key;
-    constructor(transport: "WebUSB" | "U2F" | "HID", account?: number, index?: number);
-    enable(context: Context): Promise<void>;
-    getKeys(context: Context): Promise<Key[]>;
-    sign(context: Context, bech32Address: string, message: Uint8Array): Promise<Uint8Array>;
+  readonly transport: "WebUSB" | "U2F" | "HID";
+  readonly bech32PrefixAccAddr: string;
+  private readonly account;
+  private readonly index;
+  private app;
+  private path;
+  private key;
+  constructor(
+    transport: "WebUSB" | "U2F" | "HID",
+    bech32PrefixAccAddr: string,
+    account?: number,
+    index?: number
+  );
+  enable(context: Context): Promise<void>;
+  getKeys(context: Context): Promise<Key[]>;
+  sign(
+    context: Context,
+    bech32Address: string,
+    message: Uint8Array
+  ): Promise<Uint8Array>;
 }
