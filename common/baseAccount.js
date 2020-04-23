@@ -57,7 +57,11 @@ var BaseAccount = /** @class */ (function() {
       }
       var pubKey = void 0;
       if (value.public_key) {
-        if (value.public_key.type !== "tendermint/PubKeySecp256k1") {
+        if (value.public_key.type === undefined) {
+          pubKey = new crypto_1.PubKeySecp256k1(
+            buffer_1.Buffer.from(value.public_key, "base64")
+          );
+        } else if (value.public_key.type !== "tendermint/PubKeySecp256k1") {
           throw new Error(
             "Unsupported public key type: " + value.public_key.type
           );

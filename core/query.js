@@ -130,7 +130,7 @@ var __generator =
 Object.defineProperty(exports, "__esModule", { value: true });
 var address_1 = require("../common/address");
 var baseAccount_1 = require("../common/baseAccount");
-function queryAccount(rpcInstance, account, bech32PrefixAccAddr) {
+function queryAccount(rpcInstance, account, bech32PrefixAccAddr, options) {
   return __awaiter(this, void 0, void 0, function() {
     var accAddress, result, r, response, value;
     return __generator(this, function(_a) {
@@ -147,14 +147,24 @@ function queryAccount(rpcInstance, account, bech32PrefixAccAddr) {
             4 /*yield*/,
             rpcInstance.get("abci_query", {
               params: {
-                path: "0x" + Buffer.from("custom/acc/account").toString("hex"),
-                data:
+                path:
                   "0x" +
                   Buffer.from(
-                    JSON.stringify({
-                      Address: accAddress.toBech32()
-                    })
-                  ).toString("hex")
+                    "custom/" +
+                      (options && options.querierRoute
+                        ? options.querierRoute
+                        : "acc") +
+                      "/account"
+                  ).toString("hex"),
+                data:
+                  options && options.data
+                    ? options.data
+                    : "0x" +
+                      Buffer.from(
+                        JSON.stringify({
+                          Address: accAddress.toBech32()
+                        })
+                      ).toString("hex")
               }
             })
           ];
