@@ -50,19 +50,16 @@ var PrivKeySecp256k1 = /** @class */ (function() {
     return new Uint8Array(this.privKey);
   };
   PrivKeySecp256k1.prototype.toPubKey = function() {
-    var pubKey = secp256k1_1.default.publicKeyCreate(
-      buffer_1.Buffer.from(this.privKey),
-      true
-    );
+    var pubKey = secp256k1_1.default.publicKeyCreate(this.privKey, true);
     return new PubKeySecp256k1(pubKey);
   };
   PrivKeySecp256k1.prototype.equals = function(privKey) {
     return this.toBytes().toString() === privKey.toBytes().toString();
   };
   PrivKeySecp256k1.prototype.sign = function(msg) {
-    return secp256k1_1.default.sign(
-      buffer_1.Buffer.from(new sha_js_1.sha256().update(msg).digest()),
-      buffer_1.Buffer.from(this.privKey)
+    return secp256k1_1.default.ecdsaSign(
+      new sha_js_1.sha256().update(msg).digest(),
+      this.privKey
     ).signature;
   };
   PrivKeySecp256k1.prototype.toString = function() {
@@ -103,11 +100,7 @@ var PubKeySecp256k1 = /** @class */ (function() {
     return this.toBytes().toString() === pubKey.toBytes().toString();
   };
   PubKeySecp256k1.prototype.verify = function(msg, sig) {
-    return secp256k1_1.default.verify(
-      buffer_1.Buffer.from(msg),
-      buffer_1.Buffer.from(sig),
-      buffer_1.Buffer.from(this.pubKey)
-    );
+    return secp256k1_1.default.ecdsaVerify(msg, sig, this.pubKey);
   };
   PubKeySecp256k1.prototype.toString = function() {
     return buffer_1.Buffer.from(this.pubKey).toString("hex");

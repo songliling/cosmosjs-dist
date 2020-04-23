@@ -74,7 +74,7 @@ var StdTx = /** @class */ (function() {
 })();
 exports.StdTx = StdTx;
 var defaultTxEncoder = function(context, tx) {
-  return context.get("codec").marshalBinaryLengthPrefixed(tx);
+  return context.get("codec").marshalBinaryBare(tx);
 };
 exports.defaultTxEncoder = defaultTxEncoder;
 var StdFee = /** @class */ (function() {
