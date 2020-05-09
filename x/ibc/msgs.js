@@ -121,7 +121,7 @@ var MsgTransfer = /** @class */ (function(_super) {
   __decorate(
     [
       Field.Uint64(2, {
-        jsonName: "dest_height"
+        jsonName: "destination_height"
       })
     ],
     MsgTransfer.prototype,
