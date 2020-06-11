@@ -130,9 +130,9 @@ var __generator =
 Object.defineProperty(exports, "__esModule", { value: true });
 var address_1 = require("../common/address");
 var baseAccount_1 = require("../common/baseAccount");
-function queryAccount(rpcInstance, account, bech32PrefixAccAddr) {
+function queryAccount(rpcInstance, account, bech32PrefixAccAddr, options) {
   return __awaiter(this, void 0, void 0, function() {
-    var accAddress, result, value, r, response, r, response;
+    var accAddress, result, r, response, value;
     return __generator(this, function(_a) {
       switch (_a.label) {
         case 0:
@@ -147,14 +147,24 @@ function queryAccount(rpcInstance, account, bech32PrefixAccAddr) {
             4 /*yield*/,
             rpcInstance.get("abci_query", {
               params: {
-                path: "0x" + Buffer.from("custom/auth/account").toString("hex"),
-                data:
+                path:
                   "0x" +
                   Buffer.from(
-                    JSON.stringify({
-                      account: accAddress.toBech32()
-                    })
-                  ).toString("hex")
+                    "custom/" +
+                      (options && options.querierRoute
+                        ? options.querierRoute
+                        : "acc") +
+                      "/account"
+                  ).toString("hex"),
+                data:
+                  options && options.data
+                    ? options.data
+                    : "0x" +
+                      Buffer.from(
+                        JSON.stringify({
+                          Address: accAddress.toBech32()
+                        })
+                      ).toString("hex")
               }
             })
           ];
@@ -173,48 +183,10 @@ function queryAccount(rpcInstance, account, bech32PrefixAccAddr) {
               value = JSON.parse(
                 Buffer.from(response.value, "base64").toString()
               );
+              return [2 /*return*/, baseAccount_1.BaseAccount.fromJSON(value)];
             }
           }
-          return [
-            4 /*yield*/,
-            rpcInstance.get("abci_query", {
-              params: {
-                path:
-                  "0x" +
-                  Buffer.from("custom/bank/all_balances").toString("hex"),
-                data:
-                  "0x" +
-                  Buffer.from(
-                    JSON.stringify({
-                      Address: accAddress.toBech32()
-                    })
-                  ).toString("hex")
-              }
-            })
-          ];
-        case 2:
-          result = _a.sent();
-          if (result.status !== 200) {
-            throw new Error(result.statusText);
-          }
-          if (result.data) {
-            r = result.data;
-            if (r.result && r.result.response) {
-              response = r.result.response;
-              if (response.code !== undefined && response.code !== 0) {
-                throw new Error(response.log);
-              }
-              value.value.coins = JSON.parse(
-                Buffer.from(response.value, "base64").toString()
-              );
-            }
-          }
-          if (value) {
-            return [2 /*return*/, baseAccount_1.BaseAccount.fromJSON(value)];
-          } else {
-            throw new Error("Unknown error");
-          }
-          return [2 /*return*/];
+          throw new Error("Unknown error");
       }
     });
   });

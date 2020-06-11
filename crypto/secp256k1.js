@@ -29,9 +29,8 @@ var Field = ts_amino_1.Amino.Field,
   DefineType = ts_amino_1.Amino.DefineType,
   marshalBinaryBare = ts_amino_1.Amino.marshalBinaryBare;
 var buffer_1 = require("buffer/");
-var ripemd160_1 = __importDefault(require("ripemd160"));
-var secp256k1_1 = __importDefault(require("secp256k1"));
-var sha_js_1 = require("sha.js");
+var elliptic_1 = __importDefault(require("elliptic"));
+var crypto_js_1 = __importDefault(require("crypto-js"));
 var types_1 = require("./types");
 var PrivKeySecp256k1 = /** @class */ (function() {
   function PrivKeySecp256k1(privKey) {
@@ -50,17 +49,25 @@ var PrivKeySecp256k1 = /** @class */ (function() {
     return new Uint8Array(this.privKey);
   };
   PrivKeySecp256k1.prototype.toPubKey = function() {
-    var pubKey = secp256k1_1.default.publicKeyCreate(this.privKey, true);
-    return new PubKeySecp256k1(pubKey);
+    var secp256k1 = new elliptic_1.default.ec("secp256k1");
+    var key = secp256k1.keyFromPrivate(this.privKey);
+    return new PubKeySecp256k1(
+      new Uint8Array(key.getPublic().encodeCompressed("array"))
+    );
   };
   PrivKeySecp256k1.prototype.equals = function(privKey) {
     return this.toBytes().toString() === privKey.toBytes().toString();
   };
   PrivKeySecp256k1.prototype.sign = function(msg) {
-    return secp256k1_1.default.ecdsaSign(
-      new sha_js_1.sha256().update(msg).digest(),
-      this.privKey
-    ).signature;
+    var secp256k1 = new elliptic_1.default.ec("secp256k1");
+    var key = secp256k1.keyFromPrivate(this.privKey);
+    var hash = crypto_js_1.default
+      .SHA256(crypto_js_1.default.lib.WordArray.create(msg))
+      .toString();
+    var signature = key.sign(buffer_1.Buffer.from(hash, "hex"), {
+      canonical: true
+    });
+    return new Uint8Array(signature.r.toArray().concat(signature.s.toArray()));
   };
   PrivKeySecp256k1.prototype.toString = function() {
     return buffer_1.Buffer.from(this.privKey).toString("hex");
@@ -92,15 +99,28 @@ var PubKeySecp256k1 = /** @class */ (function() {
     return new Uint8Array(this.pubKey);
   };
   PubKeySecp256k1.prototype.toAddress = function() {
-    var hash = new sha_js_1.sha256().update(this.pubKey).digest("latin1");
-    hash = new ripemd160_1.default().update(hash, "latin1").digest("hex");
+    var hash = crypto_js_1.default
+      .SHA256(crypto_js_1.default.lib.WordArray.create(this.pubKey))
+      .toString();
+    hash = crypto_js_1.default
+      .RIPEMD160(crypto_js_1.default.enc.Hex.parse(hash))
+      .toString();
     return new types_1.Address(buffer_1.Buffer.from(hash, "hex"));
   };
   PubKeySecp256k1.prototype.equals = function(pubKey) {
     return this.toBytes().toString() === pubKey.toBytes().toString();
   };
   PubKeySecp256k1.prototype.verify = function(msg, sig) {
-    return secp256k1_1.default.ecdsaVerify(msg, sig, this.pubKey);
+    var secp256k1 = new elliptic_1.default.ec("secp256k1");
+    var key = secp256k1.keyFromPublic(this.pubKey);
+    var hash = crypto_js_1.default
+      .SHA256(crypto_js_1.default.lib.WordArray.create(msg))
+      .toString();
+    var signature = {
+      r: sig.slice(0, 32),
+      s: sig.slice(32)
+    };
+    return key.verify(buffer_1.Buffer.from(hash, "hex"), signature);
   };
   PubKeySecp256k1.prototype.toString = function() {
     return buffer_1.Buffer.from(this.pubKey).toString("hex");

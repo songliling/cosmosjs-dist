@@ -30,7 +30,7 @@ var Coin = /** @class */ (function() {
   }
   Coin_1 = Coin;
   Coin.parse = function(str) {
-    var re = new RegExp("([0-9]+)[ ]*([a-zA-Z/]+)");
+    var re = new RegExp("([0-9]+)[ ]*([a-zA-Z]+)");
     var execed = re.exec(str);
     if (!execed || execed.length !== 3) {
       throw new Error("Invalid coin str");

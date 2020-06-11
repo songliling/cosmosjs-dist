@@ -60,6 +60,8 @@ describe("Test secp256k1", function() {
       buffer_1.Buffer.from(signature).toString("hex"),
       "07fd207549d1d550d567b7951897b19daa8fe01dc34baa90cb741742583b090b0af162b3fddd83a2dd5981bfd66243bcba7d64f8f1ce3bc6855b086edc65378a"
     );
+    var verified = pubKey.verify(new Uint8Array([1, 2, 3]), signature);
+    assert_1.default.strictEqual(verified, true);
   });
 });
 //# sourceMappingURL=secp256k1.spec.js.map

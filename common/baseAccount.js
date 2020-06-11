@@ -32,6 +32,9 @@ var BaseAccount = /** @class */ (function() {
     this.coins = coins;
   }
   BaseAccount.fromJSON = function(obj) {
+    if (obj.height) {
+      obj = obj.result;
+    }
     var supportedAccountType = [
       "auth/Account",
       "auth/BaseVestingAccount",
