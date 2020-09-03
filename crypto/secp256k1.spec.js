@@ -9,7 +9,7 @@ var assert_1 = __importDefault(require("assert"));
 require("mocha");
 var secp256k1_1 = require("./secp256k1");
 var buffer_1 = require("buffer/");
-var ts_amino_1 = require("@node-a-team/ts-amino");
+var ts_amino_1 = require("@chainapsis/ts-amino");
 var codec_1 = require("./codec");
 describe("Test secp256k1", function() {
   codec_1.registerCodec(ts_amino_1.Amino.globalCodec);

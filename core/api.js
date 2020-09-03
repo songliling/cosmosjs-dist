@@ -136,7 +136,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var context_1 = require("./context");
 var axios_1 = __importDefault(require("axios"));
 var tendermint_1 = require("../rpc/tendermint");
-var ts_amino_1 = require("@node-a-team/ts-amino");
+var ts_amino_1 = require("@chainapsis/ts-amino");
 var Api = /** @class */ (function() {
   function Api(config, coreConfig) {
     this._context = new context_1.Context({

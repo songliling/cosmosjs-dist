@@ -141,7 +141,7 @@ var crypto_1 = __importDefault(require("crypto"));
 var crypto_2 = require("../crypto");
 var context_1 = require("./context");
 var bip44_1 = require("./bip44");
-var ts_amino_1 = require("@node-a-team/ts-amino");
+var ts_amino_1 = require("@chainapsis/ts-amino");
 var bech32Config_1 = require("./bech32Config");
 describe("Test local wallet provider", function() {
   it("local wallet provider should generate correct priv key", function() {

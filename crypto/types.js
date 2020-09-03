@@ -24,7 +24,7 @@ var __importDefault =
     return mod && mod.__esModule ? mod : { default: mod };
   };
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts_amino_1 = require("@node-a-team/ts-amino");
+var ts_amino_1 = require("@chainapsis/ts-amino");
 var Field = ts_amino_1.Amino.Field,
   DefineType = ts_amino_1.Amino.DefineType;
 var bech32_1 = __importDefault(require("bech32"));

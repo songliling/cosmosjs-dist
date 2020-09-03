@@ -45,7 +45,7 @@ var __decorate =
     return c > 3 && r && Object.defineProperty(target, key, r), r;
   };
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts_amino_1 = require("@node-a-team/ts-amino");
+var ts_amino_1 = require("@chainapsis/ts-amino");
 var Field = ts_amino_1.Amino.Field,
   DefineStruct = ts_amino_1.Amino.DefineStruct;
 var tx_1 = require("../../core/tx");

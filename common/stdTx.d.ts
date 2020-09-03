@@ -1,5 +1,5 @@
 import { Tx, Msg, TxEncoder } from "../core/tx";
-import { Codec } from "@node-a-team/ts-amino";
+import { Codec } from "@chainapsis/ts-amino";
 import { Coin } from "./coin";
 import bigInteger from "big-integer";
 import { PubKey } from "../crypto";

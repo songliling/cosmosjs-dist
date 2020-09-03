@@ -25,7 +25,7 @@ var __importDefault =
   };
 Object.defineProperty(exports, "__esModule", { value: true });
 var big_integer_1 = __importDefault(require("big-integer"));
-var ts_amino_1 = require("@node-a-team/ts-amino");
+var ts_amino_1 = require("@chainapsis/ts-amino");
 var Method = ts_amino_1.Amino.Method,
   DefineStruct = ts_amino_1.Amino.DefineStruct;
 var Int = /** @class */ (function() {
