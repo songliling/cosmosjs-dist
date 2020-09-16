@@ -60,6 +60,7 @@ var Distribution = __importStar(require("../x/distribution"));
 var Gov = __importStar(require("../x/gov"));
 var Slashing = __importStar(require("../x/slashing"));
 var Staking = __importStar(require("../x/staking"));
+var Wasm = __importStar(require("../x/wasm"));
 var stdTx_1 = require("../common/stdTx");
 var stdTxBuilder_1 = require("../common/stdTxBuilder");
 var bip44_1 = require("../core/bip44");
@@ -102,6 +103,7 @@ var GaiaApi = /** @class */ (function(_super) {
               Gov.registerCodec(codec);
               Slashing.registerCodec(codec);
               Staking.registerCodec(codec);
+              Wasm.registerCodec(codec);
             }
           },
           coreConfig
