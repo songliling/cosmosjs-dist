@@ -20,4 +20,22 @@ export declare class MsgExecuteContract extends Msg {
   getSigners(): AccAddress[];
   validateBasic(): void;
 }
+export declare class MsgInstantiateContract extends Msg {
+  sender: AccAddress;
+  admin: AccAddress;
+  codeId: number;
+  label: string;
+  initMsg: RawMessage;
+  initFunds: Coin[];
+  constructor(
+    sender: AccAddress,
+    admin: AccAddress,
+    codeId: number,
+    label: string,
+    initMsg: object,
+    initFunds: Coin[]
+  );
+  getSigners(): AccAddress[];
+  validateBasic(): void;
+}
 export {};

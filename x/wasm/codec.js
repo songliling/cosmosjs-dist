@@ -6,6 +6,10 @@ function registerCodec(codec) {
     "wasm/MsgExecuteContract",
     msgs_1.MsgExecuteContract.prototype
   );
+  codec.registerConcrete(
+    "wasm/MsgInstantiateContract",
+    msgs_1.MsgInstantiateContract.prototype
+  );
 }
 exports.registerCodec = registerCodec;
 //# sourceMappingURL=codec.js.map

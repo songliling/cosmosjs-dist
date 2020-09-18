@@ -123,9 +123,7 @@ var MsgExecuteContract = /** @class */ (function(_super) {
         3,
         { type: ts_amino_1.Type.Defined },
         {
-          jsonName: "sent_funds",
-          writeEmpty: true,
-          emptyElements: true
+          jsonName: "sent_funds"
         }
       )
     ],
@@ -137,4 +135,107 @@ var MsgExecuteContract = /** @class */ (function(_super) {
   return MsgExecuteContract;
 })(tx_1.Msg);
 exports.MsgExecuteContract = MsgExecuteContract;
+var MsgInstantiateContract = /** @class */ (function(_super) {
+  __extends(MsgInstantiateContract, _super);
+  function MsgInstantiateContract(
+    sender,
+    admin,
+    codeId,
+    label,
+    initMsg,
+    initFunds
+  ) {
+    var _this = _super.call(this) || this;
+    _this.sender = sender;
+    _this.admin = admin;
+    _this.codeId = codeId;
+    _this.label = label;
+    _this.initMsg = new RawMessage(
+      buffer_1.Buffer.from(JSON.stringify(initMsg), "utf8")
+    );
+    _this.initFunds = initFunds;
+    return _this;
+  }
+  MsgInstantiateContract.prototype.getSigners = function() {
+    return [this.sender];
+  };
+  MsgInstantiateContract.prototype.validateBasic = function() {
+    for (var _i = 0, _a = this.initFunds; _i < _a.length; _i++) {
+      var coin = _a[_i];
+      if (coin.amount.lte(new int_1.Int(0))) {
+        throw new Error("Send amount is invalid");
+      }
+    }
+  };
+  __decorate(
+    [
+      Field.Defined(0, {
+        jsonName: "sender"
+      })
+    ],
+    MsgInstantiateContract.prototype,
+    "sender",
+    void 0
+  );
+  __decorate(
+    [
+      Field.Defined(1, {
+        jsonName: "admin",
+        jsonOmitEmpty: true
+      })
+    ],
+    MsgInstantiateContract.prototype,
+    "admin",
+    void 0
+  );
+  __decorate(
+    [
+      Field.Uint64(2, {
+        jsonName: "code_id"
+      })
+    ],
+    MsgInstantiateContract.prototype,
+    "codeId",
+    void 0
+  );
+  __decorate(
+    [
+      Field.String(3, {
+        jsonName: "label"
+      })
+    ],
+    MsgInstantiateContract.prototype,
+    "label",
+    void 0
+  );
+  __decorate(
+    [
+      Field.Slice(
+        4,
+        { type: ts_amino_1.Type.Defined },
+        { jsonName: "init_msg" }
+      )
+    ],
+    MsgInstantiateContract.prototype,
+    "initMsg",
+    void 0
+  );
+  __decorate(
+    [
+      Field.Slice(
+        5,
+        { type: ts_amino_1.Type.Defined },
+        {
+          jsonName: "init_funds"
+        }
+      )
+    ],
+    MsgInstantiateContract.prototype,
+    "initFunds",
+    void 0
+  );
+  MsgInstantiateContract = __decorate([DefineStruct()], MsgInstantiateContract);
+  return MsgInstantiateContract;
+})(tx_1.Msg);
+exports.MsgInstantiateContract = MsgInstantiateContract;
 //# sourceMappingURL=msgs.js.map
