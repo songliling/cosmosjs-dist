@@ -22,14 +22,14 @@ export declare class MsgExecuteContract extends Msg {
 }
 export declare class MsgInstantiateContract extends Msg {
   sender: AccAddress;
-  admin: AccAddress;
+  admin: AccAddress | undefined;
   codeId: number;
   label: string;
   initMsg: RawMessage;
   initFunds: Coin[];
   constructor(
     sender: AccAddress,
-    admin: AccAddress,
+    admin: AccAddress | undefined,
     codeId: number,
     label: string,
     initMsg: object,
