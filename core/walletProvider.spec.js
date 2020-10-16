@@ -169,7 +169,8 @@ describe("Test local wallet provider", function() {
               restInstance: undefined,
               queryAccount: undefined,
               bip44: new bip44_1.BIP44(44, 118, 0),
-              codec: new ts_amino_1.Codec()
+              codec: new ts_amino_1.Codec(),
+              isStargate: false
             });
             return [4 /*yield*/, localWalletProvider.enable(context)];
           case 1:

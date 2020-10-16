@@ -132,9 +132,9 @@ var address_1 = require("../common/address");
 var baseAccount_1 = require("../common/baseAccount");
 function queryAccount(rpcInstance, account, bech32PrefixAccAddr, options) {
   return __awaiter(this, void 0, void 0, function() {
-    var accAddress, result, r, response, value;
-    return __generator(this, function(_a) {
-      switch (_a.label) {
+    var _a, accAddress, result, r, response, value;
+    return __generator(this, function(_b) {
+      switch (_b.label) {
         case 0:
           if (typeof account === "string" && !bech32PrefixAccAddr) {
             throw new Error("Empty bech32 prefix");
@@ -153,6 +153,8 @@ function queryAccount(rpcInstance, account, bech32PrefixAccAddr, options) {
                     "custom/" +
                       (options && options.querierRoute
                         ? options.querierRoute
+                        : options && options.isStargate
+                        ? "auth"
                         : "acc") +
                       "/account"
                   ).toString("hex"),
@@ -161,15 +163,21 @@ function queryAccount(rpcInstance, account, bech32PrefixAccAddr, options) {
                     ? options.data
                     : "0x" +
                       Buffer.from(
-                        JSON.stringify({
-                          Address: accAddress.toBech32()
-                        })
+                        JSON.stringify(
+                          ((_a = {}),
+                          (_a[
+                            options && options.isStargate
+                              ? "address"
+                              : "Address"
+                          ] = accAddress.toBech32()),
+                          _a)
+                        )
                       ).toString("hex")
               }
             })
           ];
         case 1:
-          result = _a.sent();
+          result = _b.sent();
           if (result.status !== 200) {
             throw new Error(result.statusText);
           }

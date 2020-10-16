@@ -56,4 +56,11 @@ export declare class Api<R extends Rest> {
   readonly wallet: WalletProvider;
   readonly rpc: TendermintRPC;
   readonly rest: R;
+  /**
+   * Return whether api is stargate mode or not.
+   */
+  /**
+   * Set whether api is stargate mode or not.
+   */
+  isStargate: boolean;
 }

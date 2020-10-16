@@ -73,7 +73,13 @@ var StdTx = /** @class */ (function() {
   return StdTx;
 })();
 exports.StdTx = StdTx;
-var defaultTxEncoder = function(context, tx) {
+var defaultTxEncoder = function(context, tx, json) {
+  if (json === void 0) {
+    json = false;
+  }
+  if (json) {
+    return buffer_1.Buffer.from(context.get("codec").marshalJson(tx));
+  }
   return context.get("codec").marshalBinaryLengthPrefixed(tx);
 };
 exports.defaultTxEncoder = defaultTxEncoder;

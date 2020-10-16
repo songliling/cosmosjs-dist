@@ -41,6 +41,7 @@ var BaseAccount = /** @class */ (function() {
       "auth/ContinuousVestingAccount",
       "auth/DelayedVestingAccount",
       "cosmos-sdk/Account",
+      "cosmos-sdk/BaseAccount",
       "cosmos-sdk/BaseVestingAccount",
       "cosmos-sdk/ContinuousVestingAccount",
       "cosmos-sdk/DelayedVestingAccount"

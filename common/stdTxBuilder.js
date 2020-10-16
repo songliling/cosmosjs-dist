@@ -266,7 +266,11 @@ exports.stdTxBuilder = function(context, msgs, config) {
             return [3 /*break*/, 6];
           return [
             4 /*yield*/,
-            context.get("queryAccount")(context, signers[0].toBech32())
+            context.get("queryAccount")(
+              context,
+              signers[0].toBech32(),
+              context.get("isStargate")
+            )
           ];
         case 5:
           account = _e.sent();

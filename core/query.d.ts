@@ -7,5 +7,6 @@ export declare function queryAccount(
   options?: {
     querierRoute?: string;
     data?: string;
+    isStargate?: boolean;
   }
 ): Promise<BaseAccount>;

@@ -24,4 +24,8 @@ export declare abstract class Msg {
   getSignBytes(codec: Codec): Uint8Array;
   getSigners(): AccAddress[];
 }
-export declare type TxEncoder = (conext: Context, tx: Tx) => Uint8Array;
+export declare type TxEncoder = (
+  conext: Context,
+  tx: Tx,
+  json: boolean
+) => Uint8Array;

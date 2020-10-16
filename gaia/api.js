@@ -84,13 +84,16 @@ var GaiaApi = /** @class */ (function(_super) {
             restFactory: function(context) {
               return new rest_1.GaiaRest(context);
             },
-            queryAccount: function(context, address) {
+            queryAccount: function(context, address, isStargate) {
               return query_1.queryAccount(
                 context.get("rpcInstance"),
                 address,
                 coreConfig.bech32Config
                   ? coreConfig.bech32Config.bech32PrefixAccAddr
-                  : "cosmos"
+                  : "cosmos",
+                {
+                  isStargate: isStargate
+                }
               );
             },
             bech32Config: bech32Config_1.defaultBech32Config("cosmos"),

@@ -137,6 +137,7 @@ var context_1 = require("./context");
 var axios_1 = __importDefault(require("axios"));
 var tendermint_1 = require("../rpc/tendermint");
 var ts_amino_1 = require("@chainapsis/ts-amino");
+var buffer_1 = require("buffer/");
 var Api = /** @class */ (function() {
   function Api(config, coreConfig) {
     this._context = new context_1.Context({
@@ -157,7 +158,8 @@ var Api = /** @class */ (function() {
           }),
       queryAccount: coreConfig.queryAccount,
       bip44: coreConfig.bip44,
-      codec: new ts_amino_1.Codec()
+      codec: new ts_amino_1.Codec(),
+      isStargate: false
     });
     coreConfig.registerCodec(this.context.get("codec"));
     this._rpc = new tendermint_1.TendermintRPC(this.context);
@@ -198,21 +200,35 @@ var Api = /** @class */ (function() {
       mode = "sync";
     }
     return __awaiter(this, void 0, void 0, function() {
-      var tx, bz;
+      var isStargate, tx, bz, stdTxJson;
       return __generator(this, function(_a) {
         switch (_a.label) {
           case 0:
+            isStargate = this.context.get("isStargate");
             return [
               4 /*yield*/,
               this.context.get("txBuilder")(this.context, msgs, config)
             ];
           case 1:
             tx = _a.sent();
-            bz = this.context.get("txEncoder")(this.context, tx);
-            if (mode === "commit") {
-              return [2 /*return*/, this.rpc.broadcastTxCommit(bz)];
+            bz = this.context.get("txEncoder")(this.context, tx, isStargate);
+            stdTxJson = JSON.parse(buffer_1.Buffer.from(bz).toString());
+            // If the api is for stargate mode,
+            // Use the rest api to send the transaction.
+            if (isStargate) {
+              return [
+                2 /*return*/,
+                this.context.get("restInstance").post("/txs", {
+                  tx: stdTxJson.value,
+                  mode: mode === "commit" ? "block" : mode
+                })
+              ];
             } else {
-              return [2 /*return*/, this.rpc.broadcastTx(bz, mode)];
+              if (mode === "commit") {
+                return [2 /*return*/, this.rpc.broadcastTxCommit(bz)];
+              } else {
+                return [2 /*return*/, this.rpc.broadcastTx(bz, mode)];
+              }
             }
             return [2 /*return*/];
         }
@@ -243,6 +259,22 @@ var Api = /** @class */ (function() {
   Object.defineProperty(Api.prototype, "rest", {
     get: function() {
       return this._rest;
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(Api.prototype, "isStargate", {
+    /**
+     * Return whether api is stargate mode or not.
+     */
+    get: function() {
+      return this.context.get("isStargate");
+    },
+    /**
+     * Set whether api is stargate mode or not.
+     */
+    set: function(value) {
+      this._context = this.context.set("isStargate", value);
     },
     enumerable: true,
     configurable: true
