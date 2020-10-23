@@ -212,10 +212,10 @@ var Api = /** @class */ (function() {
           case 1:
             tx = _a.sent();
             bz = this.context.get("txEncoder")(this.context, tx, isStargate);
-            stdTxJson = JSON.parse(buffer_1.Buffer.from(bz).toString());
             // If the api is for stargate mode,
             // Use the rest api to send the transaction.
             if (isStargate) {
+              stdTxJson = JSON.parse(buffer_1.Buffer.from(bz).toString());
               return [
                 2 /*return*/,
                 this.context.get("restInstance").post("/txs", {
